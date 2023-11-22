@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Enumerator that list the possibles aling's for the text in the image, relative to the margin
+ * Enumerator that list the possibles aligns for the text in the image, relative to the margin
  * 
  * @author Adrian Jesus Simoes Silva 
+ * @author Ana Leticia Ibarra
  *
  */
 
