@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import com.github.adrianjesussilva.textimageforge.enumerator.ImageEncoder;
-import com.github.adrianjesussilva.textimageforge.enumerator.TextAling;
+import com.github.adrianjesussilva.textimageforge.enumerator.TextAlign;
 import com.github.adrianjesussilva.textimageforge.logic.exception.InvalidTextForgeConfigException;
 import com.github.adrianjesussilva.textimageforge.logic.image.ImageForge;
 import com.github.adrianjesussilva.textimageforge.logic.text.TextForge;
@@ -80,11 +80,11 @@ class TestImageForge {
 		assertTrue(exception.getMessage().contains("a text aling must be defined"));
 		
 		log.info("Validation of the font");
-		exception = assertThrows(InvalidTextForgeConfigException.class, () -> iForge.addLine(TextForge.builder().text("test00ValidationTest").textAling(TextAling.LEFT).build()), "It should produce error");
+		exception = assertThrows(InvalidTextForgeConfigException.class, () -> iForge.addLine(TextForge.builder().text("test00ValidationTest").textAlign(TextAlign.LEFT).build()), "It should produce error");
 		assertTrue(exception.getMessage().contains("A font is required for the line"));
 		
 		log.info("Validation of the color");
-		exception = assertThrows(InvalidTextForgeConfigException.class, () -> iForge.addLine(TextForge.builder().text("test00ValidationTest").textAling(TextAling.LEFT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).build()), "It should produce error");
+		exception = assertThrows(InvalidTextForgeConfigException.class, () -> iForge.addLine(TextForge.builder().text("test00ValidationTest").textAlign(TextAlign.LEFT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).build()), "It should produce error");
 		assertTrue(exception.getMessage().contains("the text require a color definition"));
 		
 		log.info("Ending validation of text forge adding text");
@@ -183,9 +183,9 @@ log.info("Starting Dynamic Size Image");
 		ImageForge iForge = ImageForge.builder().build();
 		
 		assertDoesNotThrow(() -> iForge.addLine("----------------------------------------"), "It should not produce a exception");
-		assertDoesNotThrow(() -> iForge.addLine(TextForge.builder().text("Test 03 Text Align Left").textAling(TextAling.LEFT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build()), "It should not produce a exception");
-		assertDoesNotThrow(() -> iForge.addLine(TextForge.builder().text("Test 03 Text Align Center").textAling(TextAling.CENTER).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build()), "It should not produce a exception");
-		assertDoesNotThrow(() -> iForge.addLine(TextForge.builder().text("Test 03 Text Align Right").textAling(TextAling.RIGHT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build()), "It should not produce a exception");
+		assertDoesNotThrow(() -> iForge.addLine(TextForge.builder().text("Test 03 Text Align Left").textAlign(TextAlign.LEFT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build()), "It should not produce a exception");
+		assertDoesNotThrow(() -> iForge.addLine(TextForge.builder().text("Test 03 Text Align Center").textAlign(TextAlign.CENTER).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build()), "It should not produce a exception");
+		assertDoesNotThrow(() -> iForge.addLine(TextForge.builder().text("Test 03 Text Align Right").textAlign(TextAlign.RIGHT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build()), "It should not produce a exception");
 		assertDoesNotThrow(() -> iForge.addLine("----------------------------------------"), "It should not produce a exception");
 		
 		byte[] image = null;
