@@ -7,16 +7,19 @@ import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.commons.codec.binary.Base64;
 import javax.imageio.ImageIO;
 
 import com.github.adrianjesussilva.textimageforge.enumerator.ImageEncoder;
-import com.github.adrianjesussilva.textimageforge.enumerator.TextAling;
+import com.github.adrianjesussilva.textimageforge.enumerator.TextAlign;
 import com.github.adrianjesussilva.textimageforge.logic.exception.InvalidTextForgeConfigException;
 import com.github.adrianjesussilva.textimageforge.logic.text.TextForge;
 
@@ -50,6 +53,8 @@ public class ImageForge {
 	private Integer leftMargin;
 	private Integer lineSpacing;
 	private Color background;
+	private Integer signatureWidth;
+	private Integer signatureHeight;
 	
 	private List<TextForge> lines;	
 	
@@ -109,6 +114,11 @@ public class ImageForge {
 				height += (int) Math.ceil(metrics.getHeight());
 		}
 		
+		if(signatureWidth != null && signatureHeight!=null) {
+			height +=  (int)((this.width-(leftMargin + rightMargin))*0.75*signatureWidth)/signatureWidth;
+		}
+			
+		
 		// prepare the elements to draw
 		bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		graphics2d = bufferedImage.createGraphics();
@@ -121,7 +131,7 @@ public class ImageForge {
 		int lastY = superiorMargin;
 		for(TextForge line : lines ) {
 			// set x coordinate base on the aling 
-			switch (line.getTextAling()) {
+			switch (line.getTextAlign()) {
 				case LEFT:
 					line.setXAxis(leftMargin);
 					break;
@@ -146,6 +156,24 @@ public class ImageForge {
 		// return the image
 		return bufferedImage;
 	}
+	/**
+	 * Method that renders given signature in buffered image
+	 * @return {@link BufferedImage} - the rendered image with the given signature
+	 */
+	private BufferedImage readSignature(String signature) throws InvalidTextForgeConfigException {
+		//Decode B64 signature
+		byte[] byteArray = Base64.decodeBase64(signature);
+		ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
+		try {
+			//Read signature into Image
+			BufferedImage signatureImg = ImageIO.read(bais);
+			signatureWidth = signatureImg.getWidth();
+			signatureHeight = signatureImg.getHeight();
+			return signatureImg;
+		} catch (IOException e) {
+			throw new InvalidTextForgeConfigException("The given signature could not be read");
+		}
+	}
 	
 	// Public Methods
 	/**
@@ -156,7 +184,7 @@ public class ImageForge {
 	public void addLine(TextForge line) throws InvalidTextForgeConfigException {
 		if(Objects.nonNull(line)) {
 			// Validate that the info is complete
-			if(Objects.isNull(line.getTextAling()))
+			if(Objects.isNull(line.getTextAlign()))
 				throw new InvalidTextForgeConfigException("a text aling must be defined");
 			if(Objects.isNull(line.getFont()))
 				throw new InvalidTextForgeConfigException("A font is required for the line");
@@ -176,7 +204,7 @@ public class ImageForge {
 	 * @throws InvalidTextForgeConfigException - in case of bad definition of the TextForge 
 	 */
 	public void addLine(String line) throws InvalidTextForgeConfigException {
-		addLine(TextForge.builder().text(line).textAling(TextAling.LEFT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build());
+		addLine(TextForge.builder().text(line).textAlign(TextAlign.LEFT).font(new Font(Font.MONOSPACED, Font.PLAIN, 12)).color(Color.BLACK).build());
 	}
 
 	/**
@@ -192,6 +220,36 @@ public class ImageForge {
 		byte[] image = output.toByteArray();
 		output.close();
 		return image;
+	}
+	
+	/**
+	 * Method that stores the generated voucher in the specified path
+	 * @param path
+	 * @param imageType
+	 * @return (File)
+	 * @throws IOException 
+	 * @throws InvalidTextForgeConfigException 
+	 */
+	public File forgeImage(String path,ImageEncoder imageType, String signature) throws IOException, InvalidTextForgeConfigException{
+		File voucherFile = new File(path);
+		
+		if(signature != null) {
+			ImageOverlay overlay = new ImageOverlay();
+
+			BufferedImage signatureImg = readSignature(signature);
+
+			BufferedImage voucher = getBufferedImage();
+
+			signatureImg = overlay.resizeImage(signatureImg, (int) ((int)(this.width-(leftMargin + rightMargin))*0.75), (int)((this.width-(leftMargin + rightMargin))*0.75*signatureImg.getHeight())/signatureImg.getWidth());
+			
+			BufferedImage overlayedImage = overlay.overlayImages(voucher, signatureImg, height-signatureImg.getHeight());
+			ImageIO.write(overlayedImage, (imageType!=null?imageType.name():ImageEncoder.png.name()), voucherFile);
+
+		} else {
+			ImageIO.write(getBufferedImage(), (imageType!=null?imageType.name():ImageEncoder.png.name()), voucherFile);
+		}
+		
+		return voucherFile;
 	}
 	
 }
