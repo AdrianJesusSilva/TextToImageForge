@@ -3,10 +3,7 @@ package com.github.adrianjesussilva.textimageforge.logic.image;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import com.github.adrianjesussilva.textimageforge.logic.exception.InvalidTextForgeConfigException;
 
@@ -52,20 +49,6 @@ public class ImageOverlay {
         g.drawImage(foreground, background.getWidth()/2 - foreground.getWidth()/2, bgImageHeight-20, null);
         g.dispose();
         return background;
-    }
-
-    /**
-     * Method that writes specified buffer image to file
-     * @param image (BufferedImage) - Buffered image to save
-     * @param path (String) - Path where image will be saved ("C:/image.jpg")
-     * @param extension (String) - Image type ("jpg","gif","png")
-     * @throws IOException 
-     */
-    public void writeImage(BufferedImage image, String path,
-            String extension) throws IOException {
-    	BufferedImage bi = image;
-        File outputfile = new File(path);
-        ImageIO.write(bi, extension, outputfile); 
     }
     
     
