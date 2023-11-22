@@ -156,6 +156,7 @@ public class ImageForge {
 		// return the image
 		return bufferedImage;
 	}
+	
 	/**
 	 * Method that renders given signature in buffered image
 	 * @return {@link BufferedImage} - the rendered image with the given signature
@@ -222,14 +223,7 @@ public class ImageForge {
 		return image;
 	}
 	
-	/**
-	 * Method that stores the generated voucher in the specified path
-	 * @param path
-	 * @param imageType
-	 * @return (File)
-	 * @throws IOException 
-	 * @throws InvalidTextForgeConfigException 
-	 */
+	
 	public File forgeImage(String path,ImageEncoder imageType, String signature) throws IOException, InvalidTextForgeConfigException{
 		File voucherFile = new File(path);
 		
