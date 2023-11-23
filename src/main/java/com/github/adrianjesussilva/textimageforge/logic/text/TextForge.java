@@ -3,7 +3,7 @@ package com.github.adrianjesussilva.textimageforge.logic.text;
 import java.awt.Color;
 import java.awt.Font;
 
-import com.github.adrianjesussilva.textimageforge.enumerator.TextAling;
+import com.github.adrianjesussilva.textimageforge.enumerator.TextAlign;
 
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class TextForge {
 	
 	// Attributes 
 	private String text;
-	private TextAling textAling;
+	private TextAlign textAlign;
 	private Font font;
 	private Color color;
 	
@@ -31,10 +31,10 @@ public class TextForge {
 
 	// Constructor
 	@Builder
-	public TextForge(String text, TextAling textAling, Font font, Color color) {
+	public TextForge(String text, TextAlign textAlign, Font font, Color color) {
 		super();
 		this.text = text;
-		this.textAling = textAling;
+		this.textAlign = textAlign;
 		this.font = font;
 		this.color = color;
 	}
