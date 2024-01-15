@@ -115,7 +115,7 @@ public class ImageForge {
 		}
 		
 		if(signatureWidth != null && signatureHeight!=null) {
-			height +=  (int)((this.width-(leftMargin + rightMargin))*0.75*signatureWidth)/signatureWidth;
+			height +=  (int)((this.width-(leftMargin + rightMargin))*0.5*signatureHeight)/(signatureWidth) + 40;
 		}
 			
 		
@@ -233,10 +233,16 @@ public class ImageForge {
 			BufferedImage signatureImg = readSignature(signature);
 
 			BufferedImage voucher = getBufferedImage();
-
-			signatureImg = overlay.resizeImage(signatureImg, (int) ((int)(this.width-(leftMargin + rightMargin))*0.75), (int)((this.width-(leftMargin + rightMargin))*0.75*signatureImg.getHeight())/signatureImg.getWidth());
 			
-			BufferedImage overlayedImage = overlay.overlayImages(voucher, signatureImg, height-signatureImg.getHeight());
+			signatureImg = overlay.resizeImage(signatureImg, (int) ((int)(this.width-(leftMargin + rightMargin))*0.5), (int)((this.width-(leftMargin + rightMargin))*0.5*signatureImg.getHeight())/signatureImg.getWidth());
+			
+			this.height = this.height + signatureImg.getHeight();
+
+			
+			
+			
+		
+			BufferedImage overlayedImage = overlay.overlayImages(voucher, signatureImg, height -(2*signatureImg.getHeight()));
 			ImageIO.write(overlayedImage, (imageType!=null?imageType.name():ImageEncoder.png.name()), voucherFile);
 
 		} else {
