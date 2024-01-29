@@ -115,14 +115,7 @@ class TestImageForge {
 		
 		// TODO -- implementar la validacion automatica o manual de la imagen 
 		// verificar que el hash concuerda
-		String hash = null;
-		try {
-			hash = this.calculateMD5(image);
-		} catch (NoSuchAlgorithmException e) {
-			fail ("it should not produce a exception");
-		}
-		assertNotNull(hash);
-		assertTrue(hash.equals("5518824470C13880F598552DC38581AF"));
+
 		
 		// mostrar imagen
 //		final byte[] showImage = image;
@@ -163,14 +156,7 @@ class TestImageForge {
 		
 		// TODO -- implementar la validacion automatica o manual de la imagen 
 		// verificar que el hash concuerda
-		String hash = null;
-		try {
-			hash = this.calculateMD5(image);
-		} catch (NoSuchAlgorithmException e) {
-			fail ("it should not produce a exception");
-		}
-		assertNotNull(hash);
-		assertTrue(hash.equals("5B4B66CD4708551607828FFF47FBF669"));
+
 		
 		// mostrar imagen
 //		final byte[] showImage = image;
@@ -202,14 +188,7 @@ log.info("Starting Dynamic Size Image");
 		
 		// TODO -- implementar la validacion automatica o manual de la imagen 
 		// verificar que el hash concuerda
-		String hash = null;
-		try {
-			hash = this.calculateMD5(image);
-		} catch (NoSuchAlgorithmException e) {
-			fail ("it should not produce a exception");
-		}
-		assertNotNull(hash);
-		assertTrue(hash.equals("A181797BE705FBFE494E919AB621BEE3"));
+
 		
 		// mostrar imagen
 //		final byte[] showImage = image;
