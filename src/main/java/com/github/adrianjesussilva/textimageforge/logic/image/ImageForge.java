@@ -11,12 +11,15 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.codec.binary.Base64;
 import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64OutputStream;
 
 import com.github.adrianjesussilva.textimageforge.enumerator.ImageEncoder;
 import com.github.adrianjesussilva.textimageforge.enumerator.TextAlign;
@@ -115,7 +118,7 @@ public class ImageForge {
 		}
 		
 		if(signatureWidth != null && signatureHeight!=null) {
-			height +=  (int)((this.width-(leftMargin + rightMargin))*0.75*signatureWidth)/signatureWidth;
+			height +=  (int)((this.width-(leftMargin + rightMargin))*0.5*signatureHeight)/(signatureWidth) + 40;
 		}
 			
 		
@@ -223,27 +226,43 @@ public class ImageForge {
 		return image;
 	}
 	
-	
-	public File forgeImage(String path,ImageEncoder imageType, String signature) throws IOException, InvalidTextForgeConfigException{
-		File voucherFile = new File(path);
-		
+	public BufferedImage forgeImage(ImageEncoder imageType, String signature) throws InvalidTextForgeConfigException, IOException{
 		if(signature != null) {
 			ImageOverlay overlay = new ImageOverlay();
 
 			BufferedImage signatureImg = readSignature(signature);
 
 			BufferedImage voucher = getBufferedImage();
-
-			signatureImg = overlay.resizeImage(signatureImg, (int) ((int)(this.width-(leftMargin + rightMargin))*0.75), (int)((this.width-(leftMargin + rightMargin))*0.75*signatureImg.getHeight())/signatureImg.getWidth());
 			
-			BufferedImage overlayedImage = overlay.overlayImages(voucher, signatureImg, height-signatureImg.getHeight());
-			ImageIO.write(overlayedImage, (imageType!=null?imageType.name():ImageEncoder.png.name()), voucherFile);
-
+			signatureImg = overlay.resizeImage(signatureImg, (int) ((int)(this.width-(leftMargin + rightMargin))*0.5), (int)((this.width-(leftMargin + rightMargin))*0.5*signatureImg.getHeight())/signatureImg.getWidth());
+			
+			this.height = this.height + signatureImg.getHeight();
+			
+			BufferedImage overlayedImage = overlay.overlayImages(voucher, signatureImg, height -(2*signatureImg.getHeight()));
+			
+			return overlayedImage;
 		} else {
-			ImageIO.write(getBufferedImage(), (imageType!=null?imageType.name():ImageEncoder.png.name()), voucherFile);
+			return getBufferedImage();
 		}
 		
+		
+	}
+	
+	public File forgeImage(String path,ImageEncoder imageType, String signature) throws IOException, InvalidTextForgeConfigException{
+		File voucherFile = new File(path);
+		
+		ImageIO.write(forgeImage(imageType, signature), (imageType!=null?imageType.name():ImageEncoder.png.name()), voucherFile);
+		
 		return voucherFile;
+	}
+	
+	public String forgeImageB64(ImageEncoder imageType, String signature) throws IOException, InvalidTextForgeConfigException {
+		BufferedImage img = forgeImage(imageType, signature);
+		
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		OutputStream b64 = new Base64OutputStream(os);
+		ImageIO.write(img, "png", b64);
+		return os.toString("UTF-8");
 	}
 	
 }
