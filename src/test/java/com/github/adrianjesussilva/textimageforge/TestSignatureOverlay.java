@@ -127,5 +127,20 @@ class TestSignatureOverlay {
 		assertDoesNotThrow(() -> voucherImage(fileName,voucherLines , null));
 		log.info("Ending validation of voucher generation");
 	}
+	
+	/**
+	 * Test to validate image generation with signature smaller than voucher width
+	 */
+	@Test
+	@DisplayName("Test 02 Validation test with small signature")
+	void test02ValidationTest () {
+		log.info("Starting validation of voucher generation with small signature");
+		String fileName = "voucher-small-signature";
+		String signature = "iVBORw0KGgoAAAANSUhEUgAAABQAAABaCAIAAAA3ueFGAAAAAXNSR0IArs4c6QAAAANzQklUCAgI2+FP4AAAAvxJREFUWIXtl7tS3DAUhn+Z9GiTmsFUSRNmlTegzZICymQnyVDzCJ5J8gA8AlTUa2YYSqioodra+wKJvH3ik0JrcSzrYjZDKv5qJevzOT4XSQsarKIowFQURYZ/0DP8DD/D/xkmovVhIYT9PZ/P+eRoNHqE2/f399YdIYRSCsndp2kaItJaO440TZO2bABj1oZAKSWEGOr2zc0NH+7u7mLtVG1tba0PG6XhSKqHBmw+n/NQG71IwgDKsizLks+MRqOVV3FprTc3N7kjUkqtNRGl4ePjY8eR2WxmHqXhPM85eXBwYB8l4KqqHLPGYaNgtInIeMgnlVJSSjsMwiYxWmueoclkwtc8cZFE9JRwvyQfAUc+OAYbbLlcWvt9LxKpury8tC8iolU/cAshORUCoKoqviAGHx4ecpJXdQLuV3VZlh7Y7MyOTk5OOJnneX9N5g0jgNvbW/5oOp16ohpy23SPhe/u7vpr/LA9loyklN5l/jxfX1/z4d7enneZCxMRgLquBTLRPn3z9vUf/E7D8U5w5N+3hRCEJgn7v5mizZSAByqjtmPWgUO92rWQZT4f/W7bi0/Ccn+qLMuLiws+81K+El4zTsU5ZyIAeyama9vpRACz2czbsx5YKcXJ/u4RhPu7x2KxiMCZ/XJ0z0QhxHg83t7eTkfb5PlX/RNtvgk0+fA+QuIJzypqa5YCxduBnSK1w1DxZp23NgLtSECI8KVjBYfeGnK1A/PB1dUVH7rHmteCrRDHC1shofJ8sGzudXbIKyQYMPvL/Iuw2t/fT/js5lngocJEk9xAPcmIbElOCjywWdGIpulZdt6buNDE1YUJov3oDWzYHTNR23Vdn5+fh9YlUnV2drZYLPiD4I7pwNT+VbTa2dk5OjqKkyvY7URg+vETv5TH4LWVgUXLiABkg474DMDp6akTrSE+P1jmU3meD4kWAFRV5dgpiiKy0Xf6+ce378uu5YE+A50uXPkcOhP7wtfPXywspfReE4PwUtfvxgqAUsq5iyf1FytwXKrys4/uAAAAAElFTkSuQmCC";
+		String [] voucherLines={"","        VOUCHER 2 "," ", "this is a voucher"};
+		assertDoesNotThrow(() -> voucherImage(fileName,voucherLines , signature));
+		
+		log.info("Ending validation of voucher generation");
+	}
 
 }

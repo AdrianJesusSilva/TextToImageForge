@@ -118,7 +118,15 @@ public class ImageForge {
 		}
 		
 		if(signatureWidth != null && signatureHeight!=null) {
-			height +=  (int)((this.width-(leftMargin + rightMargin))*0.5*signatureHeight)/(signatureWidth) + 40;
+			
+			//Avoid oversizing small images that don't requiere a strech
+			double safeZoneWidth = (this.width-(leftMargin + rightMargin))*0.5;
+			if ((int) safeZoneWidth <= signatureWidth) {
+				height +=  (int)(safeZoneWidth*signatureHeight)/(signatureWidth) + 40;
+			}
+			else {
+				height +=  (int)(signatureHeight) + 40;
+			}
 		}
 			
 		
@@ -234,7 +242,12 @@ public class ImageForge {
 
 			BufferedImage voucher = getBufferedImage();
 			
-			signatureImg = overlay.resizeImage(signatureImg, (int) ((int)(this.width-(leftMargin + rightMargin))*0.5), (int)((this.width-(leftMargin + rightMargin))*0.5*signatureImg.getHeight())/signatureImg.getWidth());
+			//Avoid oversizing small images that don't requiere a strech
+			double safeZoneWidth = (this.width-(leftMargin + rightMargin))*0.5;
+			
+			if ((int) safeZoneWidth <= signatureImg.getWidth()) {
+				signatureImg = overlay.resizeImage(signatureImg, (int) (safeZoneWidth), (int)(safeZoneWidth*signatureImg.getHeight())/signatureImg.getWidth());
+			}
 			
 			this.height = this.height + signatureImg.getHeight();
 			
